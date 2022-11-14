@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<AnchorPane prefHeight="558.0" prefWidth="769.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AllAppointmentController">
+   <children>
+      <TableView fx:id="appointmentTable" layoutX="13.0" layoutY="65.0" prefHeight="205.0" prefWidth="744.0">
+        <columns>
+          <TableColumn fx:id="aptIdColumn" prefWidth="75.0" text="Apt ID" />
+          <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
+            <TableColumn fx:id="descColumn" prefWidth="75.0" text="Desc." />
+            <TableColumn fx:id="locationColumn" prefWidth="75.0" text="Location" />
+            <TableColumn fx:id="contactColumn" prefWidth="75.0" text="Contact" />
+            <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="startColumn" prefWidth="75.0" text="Start D/T" />
+            <TableColumn fx:id="endColumn" prefWidth="75.0" text="End D/T" />
+            <TableColumn fx:id="customerIdColumn" prefWidth="75.0" text="CID" />
+            <TableColumn fx:id="userIdColumn" prefWidth="75.0" text="UserID" />
+        </columns>
+      </TableView>
+      <RadioButton fx:id="WeekRadio" layoutX="668.0" layoutY="30.0" mnemonicParsing="false" onAction="#WeekSelected" text="Week">
+         <toggleGroup>
+            <ToggleGroup fx:id="MonthWeek" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="MonthRadio" layoutX="566.0" layoutY="30.0" mnemonicParsing="false" onAction="#MonthSelected" selected="true" text="Month" toggleGroup="$MonthWeek" />
+      <Button layoutX="13.0" layoutY="279.0" mnemonicParsing="false" onAction="#addAptButton" text="Add Apt" />
+      <Button layoutX="94.0" layoutY="279.0" mnemonicParsing="false" onAction="#updateAptButton" text="Update Selected" />
+      <Button layoutX="652.0" layoutY="279.0" mnemonicParsing="false" onAction="#deleteAptButton" text="Delete Selected" />
+      <Button layoutX="693.0" layoutY="519.0" mnemonicParsing="false" onAction="#backButton" text="BACK" />
+      <Label layoutX="29.0" layoutY="16.0" text="Viewing all appointments by: Month">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
