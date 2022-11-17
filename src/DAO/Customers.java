@@ -15,7 +15,7 @@ public class Customers {
 
         ObservableList<Customer> customerObservableList = FXCollections.observableArrayList();
         String query = "SELECT customers.Customer_ID, customers.Customer_Name, customers.Address, customers.Postal_Code, " +
-                "customers.Phone, customers.Division_ID, first_level_divisions.Division from customers INNER JOIN  " +
+                "customers.Phone, customers.Division_ID, first_level_divisions.Division from customers INNER JOIN " +
                 "first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
         ResultSet rs = ps.executeQuery();
@@ -33,5 +33,24 @@ public class Customers {
             customerObservableList.add(customer);
         }
         return customerObservableList;
+    }
+
+    public static void deleteCustomer(int customerID) throws SQLException {
+        try {
+            String update = "DELETE FROM customers WHERE Customer_ID = " + customerID;
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(update);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error with delete execution");
+        }
+        }
+
+    public static void saveCustomer(int customerId, String name, String address, String postalCode,
+                                    String phone, int divisionId) throws SQLException {
+        String query = "INSERT INTO customers(Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID) " +
+                "VALUES (" + customerId + ", '" + name + "', '" + address + "', '" +
+                postalCode + "', '" + phone + "', " + divisionId + ");";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
+        ps.executeUpdate();
     }
 }

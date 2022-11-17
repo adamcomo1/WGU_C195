@@ -35,4 +35,14 @@ public class Appointments {
         }
         return appointmentObservableList;
     }
+
+    public static void deleteAppointment(int apptId) throws SQLException {
+        try {
+            String update = "DELETE FROM appointments WHERE Appointment_ID = " + apptId;
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(update);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error with delete execution");
+        }
+    }
 }

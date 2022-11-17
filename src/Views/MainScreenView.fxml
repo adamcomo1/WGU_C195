@@ -11,10 +11,10 @@
           <TableColumn fx:id="customerIdColumn" prefWidth="78.0" text="Customer ID" />
             <TableColumn fx:id="customerNameColumn" prefWidth="221.0" text="Customer Name" />
             <TableColumn fx:id="customerPhoneColumn" prefWidth="224.0" text="Customer Phone" />
-            <TableColumn fx:id="customerAddressColumn" prefWidth="248.0" text="Address" />
-            <TableColumn fx:id="customerPostalCode" prefWidth="117.0" text="Postal Code" />
-          <TableColumn fx:id="customerDivisionIdColumn" prefWidth="74.0" text="Division ID" />
-            <TableColumn fx:id="customerDivisionColumn" prefWidth="91.0" text="Country ID" />
+            <TableColumn fx:id="customerAddressColumn" prefWidth="212.0" text="Address" />
+            <TableColumn fx:id="customerPostalCode" prefWidth="131.0" text="Postal Code" />
+          <TableColumn fx:id="customerDivisionIdColumn" prefWidth="81.0" text="Division ID" />
+            <TableColumn fx:id="customerDivisionColumn" prefWidth="106.0" text="Division" />
         </columns>
       </TableView>
       <Button layoutX="42.0" layoutY="341.0" mnemonicParsing="false" onAction="#addAptButton" text="Add Appointment">
@@ -38,7 +38,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TableView fx:id="allCustomerTable1" layoutX="42.0" layoutY="495.0" prefHeight="221.0" prefWidth="999.0">
+      <TableView fx:id="allApptTable" layoutX="42.0" layoutY="495.0" prefHeight="221.0" prefWidth="999.0">
          <columns>
             <TableColumn fx:id="apptIdColumn" prefWidth="68.0" text="Appt ID" />
             <TableColumn fx:id="apptTitleColumn" prefWidth="140.0" text="Title" />
@@ -51,7 +51,7 @@
             <TableColumn fx:id="aptContactColumn" prefWidth="71.0" text="Contact" />
          </columns>
       </TableView>
-      <RadioButton fx:id="viewByMonthRadio" layoutX="42.0" layoutY="461.0" mnemonicParsing="false" onAction="#monthSelected" selected="true" text="View By Month">
+      <RadioButton fx:id="viewByMonthRadio" layoutX="42.0" layoutY="461.0" mnemonicParsing="false" onAction="#monthSelected" text="View By Month">
          <toggleGroup>
             <ToggleGroup fx:id="weekMonth" />
          </toggleGroup></RadioButton>
@@ -76,5 +76,6 @@
             <Font size="14.0" />
          </font>
       </Button>
+      <RadioButton fx:id="viewAllRadio" layoutX="276.0" layoutY="461.0" mnemonicParsing="false" onAction="#viewAllSelected" selected="true" text="View All" toggleGroup="$weekMonth" />
    </children>
 </AnchorPane>

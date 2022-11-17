@@ -122,6 +122,13 @@ public class Customer {
         this.divisionName = divisionName;
     }
 
+    public static int customerIdCounter = 6;
+
+    public static int newCustomerId() {
+        customerIdCounter++;
+        return customerIdCounter;
+    }
+
     /**
      * Constructor for customer class.
      * @param customerId

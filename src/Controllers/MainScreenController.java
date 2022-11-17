@@ -1,7 +1,10 @@
 package Controllers;
 
 import DAO.Appointments;
+import DAO.Customers;
 import Models.Appointment;
+import Models.Customer;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,17 +21,17 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainScreenController implements Initializable {
-    public TableView allCustomerTable;
+    public TableView<Customer> allCustomerTable;
     public TableColumn customerDivisionColumn;
     public TableColumn customerIdColumn;
     public TableColumn customerNameColumn;
     public TableColumn customerPhoneColumn;
     public TableColumn customerAddressColumn;
     public TableColumn customerPostalCode;
-    public TableView allCustomerTable1;
     public TableColumn apptIdColumn;
     public TableColumn apptTitleColumn;
     public TableColumn aptCustomerIdColumn;
@@ -37,10 +41,20 @@ public class MainScreenController implements Initializable {
     public TableColumn aptStartColumn;
     public TableColumn aptEndColumn;
     public RadioButton viewByMonthRadio;
+    public RadioButton viewAllRadio;
     public ToggleGroup weekMonth;
     public RadioButton viewByWeekRadio;
     public TableColumn aptContactColumn;
     public TableColumn customerDivisionIdColumn;
+    public TableView<Appointment> allApptTable;
+    /**
+     * value to store if an alert has been given already.
+     */
+    public static boolean alerted = false;
+
+
+
+
 
     public void addCustomerButton(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/AddCustomerView.fxml")));
@@ -50,7 +64,29 @@ public class MainScreenController implements Initializable {
         stage.show();
     }
 
-    public void customerDeleteButton(ActionEvent actionEvent) {
+    public void customerDeleteButton(ActionEvent actionEvent) throws SQLException {
+        Customer customerSelected = allCustomerTable.getSelectionModel().getSelectedItem();
+        if (customerSelected == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("No Customer Selected");
+            alert.showAndWait();
+        }
+        else {
+            int customerID = allCustomerTable.getSelectionModel().getSelectedItem().getCustomerId();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Confirmation");
+            alert.setContentText("Are you sure you wish to delete the selected customer?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Customers.deleteCustomer(customerID);
+
+                ObservableList<Customer> allCustomers = Customers.getAllCustomers();
+                allCustomerTable.setItems(allCustomers);
+            }
+        }
     }
 
     public void customerUpdateButton(ActionEvent actionEvent) throws IOException {
@@ -70,12 +106,64 @@ public class MainScreenController implements Initializable {
     }
 
     public void monthSelected(ActionEvent actionEvent) {
+        try {
+        ObservableList<Appointment> appointmentObservableList = Appointments.getAllAppointments();
+        ObservableList<Appointment> monthObservableList = FXCollections.observableArrayList();
+        LocalDateTime month = LocalDateTime.now().plusMonths(1);
+
+        for (Appointment appointment : appointmentObservableList) {
+            if (appointment.getApptEnd().isBefore(month) &&
+                    appointment.getApptEnd().isAfter(LocalDateTime.now().minusDays(1))) {
+                monthObservableList.add(appointment);
+            }
+        }
+        allApptTable.setItems(monthObservableList); } catch (SQLException e) {
+            System.out.println("Bad appointment data");
+        }
     }
 
     public void weekSelected(ActionEvent actionEvent) {
+        try {
+            ObservableList<Appointment> appointmentObservableList = Appointments.getAllAppointments();
+            ObservableList<Appointment> weekObservableList = FXCollections.observableArrayList();
+            LocalDateTime week = LocalDateTime.now().plusWeeks(1);
+
+            for (Appointment appointment : appointmentObservableList) {
+                if (appointment.getApptEnd().isBefore(week) &&
+                        appointment.getApptEnd().isAfter(LocalDateTime.now().minusDays(1))) {
+                    weekObservableList.add(appointment);
+                }
+            }
+            allApptTable.setItems(weekObservableList); } catch (SQLException e) {
+            System.out.println("Bad appointment data");
+        }
+
     }
 
-    public void deleteAppointment(ActionEvent actionEvent) {
+    public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
+        Appointment appointmentSelected = allApptTable.getSelectionModel().getSelectedItem();
+        if (appointmentSelected == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("No Appointment Selected");
+            alert.showAndWait();
+        }
+        else {
+            int ApptId = allApptTable.getSelectionModel().getSelectedItem().getAppointmentId();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Confirmation");
+            alert.setContentText("Are you sure you wish to delete the selected appointment?");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Appointments.deleteAppointment(ApptId);
+
+                ObservableList<Appointment> allAppointments = Appointments.getAllAppointments();
+                allApptTable.setItems(allAppointments);
+            }
+        }
+
     }
 
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
@@ -96,16 +184,49 @@ public class MainScreenController implements Initializable {
                 LocalDateTime start = appointment.getApptStart();
                 LocalDateTime now = LocalDateTime.now();
                 if (start.isBefore(upComingAppt) && start.isAfter(now) || start.isEqual(now)) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Upcoming Appointment");
-                    alert.setContentText("There is an upcoming appointment within the next 15 minutes.");
-                    alert.showAndWait();
+                    if (!alerted) {
+                        alerted = true;
+
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Upcoming Appointment");
+                        alert.setContentText("There is an upcoming appointment within the next 15 minutes.");
+                        alert.showAndWait();
+                    }
                 }
             }
         } catch (SQLException e) {
             System.out.println("SQL error");
+        } try {
+            allCustomerTable.setItems(Customers.getAllCustomers());
+            customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+            customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+            customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+            customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+            customerPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+            customerDivisionIdColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
+            customerDivisionColumn.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
+        } catch (SQLException e) {
+            System.out.println("Customer data invalid");
         }
-    }
+        try {
+            allApptTable.setItems(Appointments.getAllAppointments());
+        } catch (SQLException e) {
+            System.out.println("Appointment Data invalid");
+        }
+        apptIdColumn.setCellValueFactory((new PropertyValueFactory<>("appointmentId")));
+        apptTitleColumn.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
+        aptCustomerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        aptDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
+        aptLocationColumn.setCellValueFactory(new PropertyValueFactory<>("apptLocation"));
+        aptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+        aptStartColumn.setCellValueFactory(new PropertyValueFactory<>("apptStart"));
+        aptEndColumn.setCellValueFactory(new PropertyValueFactory<>("apptEnd"));
+        aptContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+
+
+
+
+        }
 
     public void reportsButtonPressed(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/ReportsView.fxml")));
@@ -113,5 +234,23 @@ public class MainScreenController implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void viewAllSelected(ActionEvent actionEvent) {
+        try {
+            allApptTable.setItems(Appointments.getAllAppointments());
+        } catch (SQLException e) {
+            System.out.println("Appointment Data invalid");
+        }
+        apptIdColumn.setCellValueFactory((new PropertyValueFactory<>("appointmentId")));
+        apptTitleColumn.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
+        aptCustomerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        aptDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
+        aptLocationColumn.setCellValueFactory(new PropertyValueFactory<>("apptLocation"));
+        aptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+        aptStartColumn.setCellValueFactory(new PropertyValueFactory<>("apptStart"));
+        aptEndColumn.setCellValueFactory(new PropertyValueFactory<>("apptEnd"));
+        aptContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactId"));
+
     }
 }
