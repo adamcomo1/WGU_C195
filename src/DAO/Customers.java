@@ -1,5 +1,6 @@
 package DAO;
 
+import Controllers.MainScreenController;
 import Models.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,6 +51,32 @@ public class Customers {
         String query = "INSERT INTO customers(Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID) " +
                 "VALUES (" + customerId + ", '" + name + "', '" + address + "', '" +
                 postalCode + "', '" + phone + "', " + divisionId + ");";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
+        ps.executeUpdate();
+    }
+
+    public static ObservableList<String> getCustomerState() throws SQLException {
+        ObservableList<String> customerState = FXCollections.observableArrayList();
+        Customer customerSelected = MainScreenController.getCustomerToModify();
+        int divisionId = customerSelected.getDivisionId();
+
+
+        String query = "SELECT Division FROM first_level_divisions WHERE Division_ID = " + divisionId;
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            String division = rs.getString("Division");
+            customerState.add(division);
+        }
+        return customerState;
+    }
+
+    public static void updateCustomer(int customerId, String name, String address, String postalCode,
+                                      String phone, int divisionId) throws SQLException {
+        String query = "UPDATE customers SET Customer_Name = '" + name + "', Address = '" + address +
+                "', Postal_Code = '" + postalCode + "', Phone = '" + phone + "', Division_ID = '" + divisionId
+                + "' WHERE Customer_ID = '" + customerId + "';";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
         ps.executeUpdate();
     }

@@ -2,6 +2,7 @@ package Controllers;
 
 import DAO.Appointments;
 import DAO.Customers;
+import DAO.Users;
 import Models.Appointment;
 import Models.Customer;
 import javafx.collections.FXCollections;
@@ -26,12 +27,12 @@ import java.util.ResourceBundle;
 
 public class MainScreenController implements Initializable {
     public TableView<Customer> allCustomerTable;
-    public TableColumn customerDivisionColumn;
-    public TableColumn customerIdColumn;
-    public TableColumn customerNameColumn;
-    public TableColumn customerPhoneColumn;
-    public TableColumn customerAddressColumn;
-    public TableColumn customerPostalCode;
+    public TableColumn<Customer, String> customerDivisionColumn;
+    public TableColumn<Customer, Integer> customerIdColumn;
+    public TableColumn<Customer, String> customerNameColumn;
+    public TableColumn<Customer, String> customerPhoneColumn;
+    public TableColumn<Customer, String> customerAddressColumn;
+    public TableColumn<Customer, String> customerPostalCode;
     public TableColumn apptIdColumn;
     public TableColumn apptTitleColumn;
     public TableColumn aptCustomerIdColumn;
@@ -45,7 +46,8 @@ public class MainScreenController implements Initializable {
     public ToggleGroup weekMonth;
     public RadioButton viewByWeekRadio;
     public TableColumn aptContactColumn;
-    public TableColumn customerDivisionIdColumn;
+    public TableColumn aptUserIdColumn;
+    public TableColumn<Customer, Integer> customerDivisionIdColumn;
     public TableView<Appointment> allApptTable;
     /**
      * value to store if an alert has been given already.
@@ -53,7 +55,17 @@ public class MainScreenController implements Initializable {
     public static boolean alerted = false;
 
 
+    public static Customer getCustomerToModify() {
+        return customerToModify;
+    }
 
+    public static Appointment getAppointmentToModify() {
+        return appointmentToModify;
+    }
+
+    private static Customer customerToModify;
+
+    private static Appointment appointmentToModify;
 
 
     public void addCustomerButton(ActionEvent actionEvent) throws IOException {
@@ -66,13 +78,20 @@ public class MainScreenController implements Initializable {
 
     public void customerDeleteButton(ActionEvent actionEvent) throws SQLException {
         Customer customerSelected = allCustomerTable.getSelectionModel().getSelectedItem();
+        int customer = allCustomerTable.getSelectionModel().getSelectedItem().getCustomerId();
         if (customerSelected == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("No Customer Selected");
             alert.showAndWait();
         }
-        else {
+        else if (Appointments.checkForAppointment(customer)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Can't Delete");
+            alert.setContentText("Cannot delete a customer who still has appointments associated.");
+            alert.showAndWait();
+        }
+        else  {
             int customerID = allCustomerTable.getSelectionModel().getSelectedItem().getCustomerId();
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -90,21 +109,37 @@ public class MainScreenController implements Initializable {
     }
 
     public void customerUpdateButton(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/UpdateCustomerView.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        customerToModify = allCustomerTable.getSelectionModel().getSelectedItem();
+         if (customerToModify == null) {
+             Alert alert = new Alert(Alert.AlertType.WARNING);
+             alert.setTitle("No Customer Selected");
+             alert.setContentText("Please select a customer to update.");
+             alert.showAndWait();
+         }
+         else {
+             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/UpdateCustomerView.fxml")));
+             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+             Scene scene = new Scene(root);
+             stage.setScene(scene);
+             stage.show();
+         }
     }
 
     public void addAptButton(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/AddAppointmentView.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        customerToModify = allCustomerTable.getSelectionModel().getSelectedItem();
+        if (customerToModify == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Customer Selected");
+            alert.setContentText("Please select a customer to add an appointment.");
+            alert.showAndWait();
+        } else {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/AddAppointmentView.fxml")));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
     }
-
     public void monthSelected(ActionEvent actionEvent) {
         try {
         ObservableList<Appointment> appointmentObservableList = Appointments.getAllAppointments();
@@ -167,11 +202,20 @@ public class MainScreenController implements Initializable {
     }
 
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/UpdateAppointmentView.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        appointmentToModify = allApptTable.getSelectionModel().getSelectedItem();
+        if (appointmentToModify == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Customer Selected");
+            alert.setContentText("Please select an appointment to update.");
+            alert.showAndWait();
+        }
+        else {
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/UpdateAppointmentView.fxml")));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     @Override
@@ -222,11 +266,8 @@ public class MainScreenController implements Initializable {
         aptStartColumn.setCellValueFactory(new PropertyValueFactory<>("apptStart"));
         aptEndColumn.setCellValueFactory(new PropertyValueFactory<>("apptEnd"));
         aptContactColumn.setCellValueFactory(new PropertyValueFactory<>("contactId"));
-
-
-
-
-        }
+        aptUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+    }
 
     public void reportsButtonPressed(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/ReportsView.fxml")));

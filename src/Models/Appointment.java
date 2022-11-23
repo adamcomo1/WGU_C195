@@ -15,6 +15,13 @@ public class Appointment {
     private int userId;
     private int contactId;
 
+    public static int appointmentIdCounter = 50;
+
+    public static int getNewAppointmentId() {
+        appointmentIdCounter++;
+        return appointmentIdCounter;
+    }
+
     public int getAppointmentId() {
         return appointmentId;
     }

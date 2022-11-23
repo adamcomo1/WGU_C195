@@ -38,17 +38,18 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TableView fx:id="allApptTable" layoutX="42.0" layoutY="495.0" prefHeight="221.0" prefWidth="999.0">
+      <TableView fx:id="allApptTable" layoutX="17.0" layoutY="495.0" prefHeight="221.0" prefWidth="1061.0">
          <columns>
             <TableColumn fx:id="apptIdColumn" prefWidth="68.0" text="Appt ID" />
-            <TableColumn fx:id="apptTitleColumn" prefWidth="140.0" text="Title" />
-            <TableColumn fx:id="aptCustomerIdColumn" prefWidth="88.0" text="Customer ID" />
+            <TableColumn fx:id="apptTitleColumn" prefWidth="112.0" text="Title" />
+            <TableColumn fx:id="aptCustomerIdColumn" prefWidth="116.0" text="Customer ID" />
             <TableColumn fx:id="aptDescriptionColumn" prefWidth="145.0" text="Description" />
             <TableColumn fx:id="aptLocationColumn" prefWidth="97.0" text="Location" />
             <TableColumn fx:id="aptTypeColumn" prefWidth="123.0" text="Type" />
             <TableColumn fx:id="aptStartColumn" prefWidth="144.0" text="Start" />
             <TableColumn fx:id="aptEndColumn" prefWidth="121.0" text="End" />
-            <TableColumn fx:id="aptContactColumn" prefWidth="71.0" text="Contact" />
+            <TableColumn fx:id="aptContactColumn" prefWidth="66.0" text="Contact" />
+            <TableColumn fx:id="aptUserIdColumn" prefWidth="67.0" text="User ID" />
          </columns>
       </TableView>
       <RadioButton fx:id="viewByMonthRadio" layoutX="42.0" layoutY="461.0" mnemonicParsing="false" onAction="#monthSelected" text="View By Month">

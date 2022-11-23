@@ -15,14 +15,11 @@
       <TextField fx:id="userIdField" disable="true" layoutX="129.0" layoutY="121.0" />
       <TextField fx:id="titleField" layoutX="129.0" layoutY="154.0" />
       <TextField fx:id="descriptionField" layoutX="129.0" layoutY="186.0" />
-      <ComboBox fx:id="countryComboBox" layoutX="129.0" layoutY="224.0" prefWidth="150.0" />
+      <ComboBox fx:id="countryComboBox" layoutX="129.0" layoutY="224.0" onAction="#countrySelected" prefWidth="150.0" />
       <ComboBox fx:id="stateComboBox" layoutX="129.0" layoutY="256.0" prefWidth="150.0" />
       <ComboBox fx:id="contactComboBox" layoutX="129.0" layoutY="288.0" prefWidth="150.0" />
-      <ComboBox fx:id="typeComboBox" layoutX="129.0" layoutY="319.0" prefWidth="150.0" />
       <DatePicker fx:id="startDatePicker" layoutX="122.0" layoutY="348.0" />
       <DatePicker fx:id="endDatePicker" layoutX="122.0" layoutY="379.0" />
-      <TextField fx:id="startTimeField" layoutX="389.0" layoutY="348.0" />
-      <TextField fx:id="endTimeField" layoutX="389.0" layoutY="379.0" />
       <Button layoutX="122.0" layoutY="421.0" mnemonicParsing="false" onAction="#saveButtonPressed" text="Save">
          <font>
             <Font size="14.0" />
@@ -45,5 +42,8 @@
       <Label layoutX="48.0" layoutY="383.0" text="End Date" />
       <Label layoutX="331.0" layoutY="352.0" text="Start TIme" />
       <Label layoutX="331.0" layoutY="383.0" text="End Time" />
+      <TextField fx:id="apptTypeTextBox" layoutX="129.0" layoutY="319.0" />
+      <ComboBox fx:id="startTimeCombo" layoutX="389.0" layoutY="348.0" prefWidth="150.0" />
+      <ComboBox fx:id="endTimeCombo" layoutX="389.0" layoutY="379.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

@@ -45,4 +45,39 @@ public class Appointments {
             System.out.println("Error with delete execution");
         }
     }
+
+   public static void addAppointment (int apptId, String title, String desc, String location, String type, String start,
+                                      String end, int customerId, int userId, int contactId) throws SQLException {
+        String query = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, "
+       + "Customer_ID, User_ID, Contact_ID) VALUES ('" + apptId + "', '" + title + "', '" + desc + "', '" + location +
+                "', '" + type + "', '" + start + "', '" + end + "', '" + customerId + "', '" + userId + "', '" +
+                contactId + "');";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
+        ps.executeUpdate();
+   }
+
+   public static void updateAppointment (int apptId, String title, String desc, String location, String type, String start,
+                                         String end, int customerId, int userId, int contactId) throws SQLException {
+        String query = "UPDATE appointments SET Appointment_ID = '" + apptId + "', Title = '" + title +
+                "', Description = '" + desc + "', Location = '" + location + "', Type = '" + type + "', Start = '" +
+                start + "', End = '" + end + "', Customer_ID = '" + customerId + "', User_ID = '"
+                + userId + "', Contact_ID = '" + contactId + "' WHERE Appointment_ID = '" + apptId + "';";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
+        ps.executeUpdate();
+   }
+
+   public static boolean checkForAppointment(int customerId) throws SQLException {
+        ObservableList<Integer> customerIdList = FXCollections.observableArrayList();
+        String query = "SELECT Customer_ID FROM appointments";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int customerID = rs.getInt("Customer_ID");
+            if (customerID == customerId) {
+                return true;
+            }
+       }
+        return false;
+   }
 }

@@ -12,7 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
 public class Users {
+
+    public static int currentUser = 0;
 
     public static ObservableList<User> getAllUsers() throws SQLException {
 
@@ -42,6 +45,7 @@ public class Users {
 
         if (rs.getString("User_Name").equals(username)) {
             if (rs.getString("Password").equals(password)) {
+                currentUser = rs.getInt("User_ID");
                 return true;
             }
         }
