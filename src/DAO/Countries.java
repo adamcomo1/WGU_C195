@@ -29,5 +29,18 @@ public class Countries {
         return countriesObservableList;
     }
 
+    public static ObservableList<String> getAllCountryNames() throws SQLException {
+        ObservableList<String> countryNames = FXCollections.observableArrayList();
+        String query = "SELECT Country FROM countries";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            String countryName = rs.getString("Country");
+            countryNames.add(countryName);
+        }
+        return countryNames;
+    }
+
 
 }

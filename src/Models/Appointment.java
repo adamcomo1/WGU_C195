@@ -1,5 +1,9 @@
 package Models;
 
+import DAO.Appointments;
+import javafx.collections.ObservableList;
+
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class Appointment {
@@ -15,11 +19,18 @@ public class Appointment {
     private int userId;
     private int contactId;
 
-    public static int appointmentIdCounter = 50;
 
-    public static int getNewAppointmentId() {
-        appointmentIdCounter++;
-        return appointmentIdCounter;
+
+    public static int getNewAppointmentId() throws SQLException {
+        ObservableList<Appointment> allAppointments = Appointments.getAllAppointments();
+        int max = 0;
+        for (Appointment appointment : allAppointments) {
+            int apptId = appointment.getAppointmentId();
+            if (apptId > max) {
+                max = apptId;
+            }
+        }
+        return ++max;
     }
 
     public int getAppointmentId() {

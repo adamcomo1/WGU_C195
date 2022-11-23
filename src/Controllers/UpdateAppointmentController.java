@@ -130,6 +130,18 @@ public class UpdateAppointmentController implements Initializable {
 
 
                 if (customerId == appointment.getCustomerId() && appointmentId != appointment.getAppointmentId() &&
+                        startLocalDateTime.isEqual(start)) {
+                    alertCases(7);
+                    noErrors = false;
+                    return;
+                }
+                else if (customerId == appointment.getCustomerId() && appointmentId != appointment.getAppointmentId() &&
+                        endLocalDateTime.isEqual(end)) {
+                    alertCases(7);
+                    noErrors = false;
+                    return;
+                }
+                else if (customerId == appointment.getCustomerId() && appointmentId != appointment.getAppointmentId() &&
                         startLocalDateTime.isBefore(start) && endLocalDateTime.isAfter(end)) {
                     alertCases(7);
                     noErrors = false;

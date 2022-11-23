@@ -165,20 +165,27 @@ public class AddAppointmentController implements Initializable {
                 LocalDateTime start = appointment.getApptStart();
                 LocalDateTime end = appointment.getApptEnd();
 
+
                 if (customerId == appointment.getCustomerId() && appointmentId != appointment.getAppointmentId() &&
+                        startLocalDateTime.isEqual(start)) {
+                    alertCases(7);
+                    noErrors = false;
+                    return;
+                }
+                else if (customerId == appointment.getCustomerId() && appointmentId != appointment.getAppointmentId() &&
+                        endLocalDateTime.isEqual(end)) {
+                    alertCases(7);
+                    noErrors = false;
+                    return;
+                }
+                else if (customerId == appointment.getCustomerId() && appointmentId != appointment.getAppointmentId() &&
                         startLocalDateTime.isBefore(start) && endLocalDateTime.isAfter(end)) {
                     alertCases(7);
                     noErrors = false;
                     return;
                 }
                 else if (customerId == appointment.getCustomerId() && appointmentId != appointment.getAppointmentId() &&
-                startLocalDateTime.isAfter(start) && endLocalDateTime.isBefore(end)) {
-                    alertCases(7);
-                    noErrors = false;
-                    return;
-                }
-                else if (customerId == appointment.getCustomerId() && appointmentId != appointment.getAppointmentId() &&
-                        startLocalDateTime.isEqual(start) || endLocalDateTime.isEqual(end)) {
+                        startLocalDateTime.isAfter(start) && endLocalDateTime.isBefore(end)) {
                     alertCases(7);
                     noErrors = false;
                     return;
