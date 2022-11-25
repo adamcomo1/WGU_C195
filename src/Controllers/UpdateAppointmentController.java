@@ -15,10 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -38,6 +35,9 @@ import static Utilities.timeUtility.convertToUTC;
 import static Utilities.timeUtility.utcToEasternTime;
 import static java.lang.String.valueOf;
 
+/**
+ * Controller for the update appointment view.
+ */
 public class UpdateAppointmentController implements Initializable {
     public TextField customerIdField;
     public TextField userIdField;
@@ -51,11 +51,18 @@ public class UpdateAppointmentController implements Initializable {
     public TextField apptTypeTextBox;
     public ComboBox<String> endTimeCombo;
     public ComboBox<String> startTimeCombo;
+    public Label apptIdLabel;
     private Appointment appointmentSelected;
 
     LocalTime startTime = LocalTime.MIN;
 
-
+    /**
+     * Method for saving the updated appointment details.
+     * Provides input validation to make sure no fields are null and there are no appoitment conflicts.
+     * @param actionEvent save button pressed.
+     * @throws SQLException
+     * @throws IOException
+     */
     public void saveButtonPressed(ActionEvent actionEvent) throws SQLException, IOException {
         if (descriptionField.getText() == null || apptTypeTextBox.getText() == null ||
                 countryComboBox.getSelectionModel().isEmpty() || stateComboBox.getSelectionModel().isEmpty() ||
@@ -168,6 +175,11 @@ public class UpdateAppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Method used to cancel and return to the main screen view.
+     * @param actionEvent cancel button pressed.
+     * @throws IOException
+     */
     public void cancelButtonPressed(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/MainScreenView.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -176,9 +188,15 @@ public class UpdateAppointmentController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Initialize method called on during page load.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         appointmentSelected = MainScreenController.getAppointmentToModify();
+        apptIdLabel.setText("Appointment ID: " + appointmentSelected.getAppointmentId());
         customerIdField.setText(valueOf(appointmentSelected.getCustomerId()));
         userIdField.setText(valueOf(appointmentSelected.getUserId()));
         int appointmentId = appointmentSelected.getAppointmentId();
@@ -255,12 +273,12 @@ public class UpdateAppointmentController implements Initializable {
         String currentStart = valueOf(appointmentSelected.getApptStart());
         String[] startSplit = currentStart.split("T");
         String currentStartTime = startSplit[1];
-        System.out.println(currentStartTime);
+        //System.out.println(currentStartTime);
 
         String currentEnd = valueOf(appointmentSelected.getApptEnd());
         String[] endSplit = currentEnd.split("T");
         String currentEndTime = endSplit[1];
-        System.out.println(currentEndTime);
+        //System.out.println(currentEndTime);
 
         ObservableList<String> appointmentTimes = FXCollections.observableArrayList();
         for (int i = 0;  i < 48; i++) {
@@ -281,6 +299,10 @@ public class UpdateAppointmentController implements Initializable {
         endDatePicker.setValue(currentEndDate);
     }
 
+    /**
+     * Method for populating the state ComboBox once the country is selected.
+     * @param actionEvent Country selected.
+     */
     public void countrySelected(ActionEvent actionEvent) {
         String countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
         //System.out.println(countrySelected);
@@ -315,7 +337,10 @@ public class UpdateAppointmentController implements Initializable {
         }
     }
 
-
+    /**
+     * Switch statement method used to hold all alert cases.
+     * @param alertType
+     */
     private void alertCases(int alertType) {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);

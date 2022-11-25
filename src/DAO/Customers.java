@@ -10,8 +10,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Class used to perform SQL queries and updates on the customer table.
+ */
 public class Customers {
-
+    /**
+     * SQL query used to get all customers from the customer table.
+     * @return observable list of Customer class.
+     * @throws SQLException
+     */
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
 
         ObservableList<Customer> customerObservableList = FXCollections.observableArrayList();
@@ -36,6 +43,11 @@ public class Customers {
         return customerObservableList;
     }
 
+    /**
+     * SQL update statement used to delete selected customer using customerID.
+     * @param customerID
+     * @throws SQLException
+     */
     public static void deleteCustomer(int customerID) throws SQLException {
         try {
             String update = "DELETE FROM customers WHERE Customer_ID = " + customerID;
@@ -46,6 +58,16 @@ public class Customers {
         }
         }
 
+    /**
+     * SQL update statement used to save a new customer to the customer table.
+     * @param customerId
+     * @param name
+     * @param address
+     * @param postalCode
+     * @param phone
+     * @param divisionId
+     * @throws SQLException
+     */
     public static void saveCustomer(int customerId, String name, String address, String postalCode,
                                     String phone, int divisionId) throws SQLException {
         String query = "INSERT INTO customers(Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID) " +
@@ -72,6 +94,16 @@ public class Customers {
         return customerState;
     }
 
+    /**
+     * SQL update statement used to update the selected customer.
+     * @param customerId
+     * @param name
+     * @param address
+     * @param postalCode
+     * @param phone
+     * @param divisionId
+     * @throws SQLException
+     */
     public static void updateCustomer(int customerId, String name, String address, String postalCode,
                                       String phone, int divisionId) throws SQLException {
         String query = "UPDATE customers SET Customer_Name = '" + name + "', Address = '" + address +

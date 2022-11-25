@@ -1,5 +1,7 @@
 package Models;
-
+/**
+ * Class model for User class.
+ */
 public class User {
 
     private int userId;

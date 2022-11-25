@@ -45,5 +45,6 @@
       <TextField fx:id="apptTypeTextBox" layoutX="129.0" layoutY="319.0" />
       <ComboBox fx:id="startTimeCombo" layoutX="389.0" layoutY="348.0" prefWidth="150.0" />
       <ComboBox fx:id="endTimeCombo" layoutX="389.0" layoutY="379.0" prefWidth="150.0" />
+      <Label fx:id="apptIdLabel" layoutX="45.0" layoutY="55.0" text="Appointment ID: " />
    </children>
 </AnchorPane>

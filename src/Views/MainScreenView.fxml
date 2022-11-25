@@ -78,5 +78,6 @@
          </font>
       </Button>
       <RadioButton fx:id="viewAllRadio" layoutX="276.0" layoutY="461.0" mnemonicParsing="false" onAction="#viewAllSelected" selected="true" text="View All" toggleGroup="$weekMonth" />
+      <Label fx:id="upcomingApptLabel" layoutX="42.0" layoutY="27.0" text="Appointment in the next 15 Minutes:" />
    </children>
 </AnchorPane>

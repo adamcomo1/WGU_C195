@@ -1,5 +1,7 @@
 package Models;
-
+/**
+ * Class model for FirstLevelDivision class.
+ */
 public class FirstLevelDivision {
     public int getDivisionId() {
         return divisionId;

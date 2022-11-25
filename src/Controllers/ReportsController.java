@@ -30,6 +30,9 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
 
+/**
+ * Controller for the reports view.
+ */
 public class ReportsController implements Initializable {
 
     public TableView<Appointment> byContactTable;
@@ -51,6 +54,11 @@ public class ReportsController implements Initializable {
     public ComboBox<String> contactComboBox;
     public ComboBox<String> countryComboBox;
 
+    /**
+     * Method used to return to the main screen.
+     * @param actionEvent back to main button pressed.
+     * @throws IOException
+     */
     public void backToMain(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/MainScreenView.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -59,7 +67,11 @@ public class ReportsController implements Initializable {
         stage.show();
     }
 
-
+    /**
+     * Method used to display appointment of selected contact in the appointment table.
+     * @param actionEvent contact selected.
+     * @throws SQLException
+     */
     public void contactSelected(ActionEvent actionEvent) throws SQLException {
         try {
             ObservableList<Appointment> allAppointments = Appointments.getAllAppointments();
@@ -88,6 +100,11 @@ public class ReportsController implements Initializable {
         }
     }
 
+    /**
+     * Method used to display a count of appointments by selected type.
+     * @param actionEvent type selected.
+     * @throws SQLException
+     */
     public void typeSelected(ActionEvent actionEvent) throws SQLException {
         try {
             ObservableList<Appointment> allAppointments = Appointments.getAllAppointments();
@@ -115,6 +132,11 @@ public class ReportsController implements Initializable {
             }
     }
 
+    /**
+     * Method used to display a count of appointments based on country selected.
+     * @param actionEvent country selected.
+     * @throws SQLException
+     */
     public void countrySelected(ActionEvent actionEvent) throws SQLException {
         ObservableList<Appointment> allAppointments = Appointments.getAllAppointments();
         ObservableList<String> allCountryNames = Countries.getAllCountryNames();
@@ -132,6 +154,11 @@ public class ReportsController implements Initializable {
         }
     }
 
+    /**
+     * Initialize method called on during page load.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -228,7 +255,11 @@ public class ReportsController implements Initializable {
 
     }
 
-
+    /**
+     * Method used to display a count of appointments based on the month selected.
+     * @param actionEvent
+     * @throws SQLException
+     */
     public void monthSelected(ActionEvent actionEvent) throws SQLException {
         try {
             ObservableList<Appointment> allAppointments = Appointments.getAllAppointments();

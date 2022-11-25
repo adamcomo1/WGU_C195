@@ -1,5 +1,7 @@
 package Models;
-
+/**
+ * Class model for Country class.
+ */
 public class Country {
     /**
      * Constructor for country class.

@@ -12,9 +12,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
+/**
+ * Class used to handle sql statement on the user table.
+ */
 public class Users {
-
+    /**
+     * Integer used to keep track of the currently signed in user.
+     */
     public static int currentUser = 0;
 
     public static ObservableList<User> getAllUsers() throws SQLException {
@@ -34,6 +38,13 @@ public class Users {
         return userObservableList;
     }
 
+    /**
+     * SQL query used to validate the login credentials entered in the login page.
+     * @param username
+     * @param password
+     * @return true or false based on in credentials match or not.
+     * @throws SQLException
+     */
     public static boolean logInValidation(String username, String password) throws SQLException {
         try {
 

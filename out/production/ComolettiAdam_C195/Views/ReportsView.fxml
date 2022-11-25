@@ -39,7 +39,7 @@
             <TableColumn fx:id="contactEndColumn" minWidth="5.0" prefWidth="144.0" text="End" />
          </columns>
       </TableView>
-      <ComboBox fx:id="typeComboBox" layoutX="233.0" layoutY="21.0" prefWidth="150.0" />
+      <ComboBox fx:id="typeComboBox" layoutX="233.0" layoutY="21.0" onAction="#typeSelected" prefWidth="150.0" />
       <Label fx:id="typeCount" layoutX="70.0" layoutY="76.0" text="Count: ">
          <font>
             <Font size="18.0" />
@@ -58,8 +58,8 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <ComboBox fx:id="monthComboBox" layoutX="233.0" layoutY="209.0" prefWidth="150.0" />
-      <ComboBox fx:id="contactComboBox" layoutX="233.0" layoutY="393.0" prefWidth="150.0" />
-      <ComboBox fx:id="countryComboBox" layoutX="233.0" layoutY="589.0" prefWidth="150.0" />
+      <ComboBox fx:id="monthComboBox" layoutX="233.0" layoutY="209.0" onAction="#monthSelected" prefWidth="150.0" />
+      <ComboBox fx:id="contactComboBox" layoutX="233.0" layoutY="393.0" onAction="#contactSelected" prefWidth="150.0" />
+      <ComboBox fx:id="countryComboBox" layoutX="233.0" layoutY="589.0" onAction="#countrySelected" prefWidth="150.0" />
    </children>
 </AnchorPane>

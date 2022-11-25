@@ -36,26 +36,76 @@ import static DAO.Users.currentUser;
 import static java.lang.String.valueOf;
 
 
-
+/**
+ * Controller for the AddAppointment View.
+ * @author Adam Comoletti
+ */
 public class AddAppointmentController implements Initializable {
+    /**
+     * Text field for collecting the customer Id.
+     */
     public TextField customerIdField;
+    /**
+     * Text field for collecting the user Id.
+     */
     public TextField userIdField;
+    /**
+     * Text field for holding the title.
+     */
     public TextField titleField;
+    /**
+     * Text field to hold the description.
+     */
     public TextField descriptionField;
+    /**
+     * ComboBox of Strings used to hold all country selections
+     */
     public ComboBox<String> countryComboBox;
+    /**
+     * ComboBox of String used to hold the first level division names.
+     */
     public ComboBox<String> stateComboBox;
+    /**
+     * ComboBox of String used to hold the contact names.
+     */
     public ComboBox<String> contactComboBox;
+    /**
+     * DatePicker for selecting start date.
+     */
     public DatePicker startDatePicker;
+    /**
+     * DatePicker for selecting end date.
+     */
     public DatePicker endDatePicker;
+    /**
+     * Text field used to hold the appointment type.
+     */
     public TextField apptTypeTextBox;
+    /**
+     * ComboBox to selected the start time.
+     */
     public ComboBox<String> startTimeCombo;
+    /**
+     * ComboBox to select the end time.
+     */
     public ComboBox<String> endTimeCombo;
+    /**
+     * Used to hold the customer object selected at the main screen.
+     */
     private Customer customerSelected;
-
+    /**
+     * Value holding the minimum local time.
+     */
     LocalTime startTime = LocalTime.MIN;
     //LocalTime endTime = LocalTime.MAX.minusMinutes(1);
 
-
+    /**
+     * Initialize method called upon loading of view.
+     * Lambda expression used to efficiently add all country names to country ComboBox.
+     * Lambda expression used to efficiently add all contact names to contact ComboBox.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerSelected = MainScreenController.getCustomerToModify();
@@ -92,7 +142,13 @@ public class AddAppointmentController implements Initializable {
 
     }
 
-
+    /**
+     * Method for saving input appointment details as new appointment.
+     * Provides input validation.
+     * @param actionEvent Save button pressed.
+     * @throws SQLException
+     * @throws IOException
+     */
     public void saveButtonPressed(ActionEvent actionEvent) throws SQLException, IOException {
         if (descriptionField.getText() == null || apptTypeTextBox.getText() == null ||
                 countryComboBox.getSelectionModel().isEmpty() || stateComboBox.getSelectionModel().isEmpty() ||
@@ -205,6 +261,11 @@ public class AddAppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Method for canceling page and returning to main screen.
+     * @param actionEvent
+     * @throws IOException
+     */
     public void cancelButtonPressed(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/MainScreenView.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -213,6 +274,10 @@ public class AddAppointmentController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Method for populating the state ComboBox once the country is selected.
+     * @param actionEvent Country selected.
+     */
     public void countrySelected(ActionEvent actionEvent) {
         String countrySelected = countryComboBox.getSelectionModel().getSelectedItem();
         //System.out.println(countrySelected);
@@ -247,6 +312,10 @@ public class AddAppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Switch statement method used to hold all alert cases.
+     * @param alertType
+     */
     private void alertCases(int alertType) {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);

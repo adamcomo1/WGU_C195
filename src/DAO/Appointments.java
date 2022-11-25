@@ -10,8 +10,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+/**
+ * Class for handling SQL of appointments.
+ */
 public class Appointments {
-
+    /**
+     * SQL Query function used to get all appointments from the database.
+     * @return Observable List of class Appointment.
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
 
         ObservableList<Appointment> appointmentObservableList = FXCollections.observableArrayList();
@@ -36,6 +43,11 @@ public class Appointments {
         return appointmentObservableList;
     }
 
+    /**
+     * SQL update statement used to delete a selected appointment in the database.
+     * @param apptId
+     * @throws SQLException
+     */
     public static void deleteAppointment(int apptId) throws SQLException {
         try {
             String update = "DELETE FROM appointments WHERE Appointment_ID = " + apptId;
@@ -46,6 +58,20 @@ public class Appointments {
         }
     }
 
+    /**
+     * SQL update statement used to add a new appointment to the database.
+     * @param apptId
+     * @param title
+     * @param desc
+     * @param location
+     * @param type
+     * @param start
+     * @param end
+     * @param customerId
+     * @param userId
+     * @param contactId
+     * @throws SQLException
+     */
    public static void addAppointment (int apptId, String title, String desc, String location, String type, String start,
                                       String end, int customerId, int userId, int contactId) throws SQLException {
         String query = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, "
@@ -56,6 +82,20 @@ public class Appointments {
         ps.executeUpdate();
    }
 
+    /**
+     * SQL update statement used to update a current appointment in the database.
+     * @param apptId
+     * @param title
+     * @param desc
+     * @param location
+     * @param type
+     * @param start
+     * @param end
+     * @param customerId
+     * @param userId
+     * @param contactId
+     * @throws SQLException
+     */
    public static void updateAppointment (int apptId, String title, String desc, String location, String type, String start,
                                          String end, int customerId, int userId, int contactId) throws SQLException {
         String query = "UPDATE appointments SET Appointment_ID = '" + apptId + "', Title = '" + title +
@@ -66,6 +106,12 @@ public class Appointments {
         ps.executeUpdate();
    }
 
+    /**
+     * SQL query used to check if there is a appointment for the selected Customer.
+     * @param customerId
+     * @return boolean based on if there is a matching Customer Id in the appointments.
+     * @throws SQLException
+     */
    public static boolean checkForAppointment(int customerId) throws SQLException {
         ObservableList<Integer> customerIdList = FXCollections.observableArrayList();
         String query = "SELECT Customer_ID FROM appointments";

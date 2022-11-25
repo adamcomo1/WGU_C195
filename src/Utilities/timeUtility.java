@@ -6,6 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Class to hold different time converting methods.
+ */
 public class timeUtility {
 
     public static String convertToUTC(String dateTime) {

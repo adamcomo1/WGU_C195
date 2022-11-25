@@ -10,6 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Class used to handle SQL statements for the firstleveldivsion table.
+ */
 public class FirstLevelDivisions {
 
     public static ObservableList<FirstLevelDivision> getAllFirstLevel() throws SQLException {
@@ -28,6 +31,11 @@ public class FirstLevelDivisions {
         return firstLevelDivisionObservableList;
     }
 
+    /**
+     * SQL query used to get all the divisions associated with US.
+     * @return observable list of all divisions associated with the US.
+     * @throws SQLException
+     */
     public static ObservableList<String> getUSDivision() throws SQLException {
         ObservableList<String> divisionNames = FXCollections.observableArrayList();
         String query = "SELECT Division FROM first_level_divisions WHERE Country_ID = '1'";
@@ -40,7 +48,11 @@ public class FirstLevelDivisions {
         }
         return divisionNames;
     }
-
+    /**
+     * SQL query used to get all the divisions associated with UK.
+     * @return observable list of all divisions associated with the UK.
+     * @throws SQLException
+     */
     public static ObservableList<String> getUKDivision() throws SQLException {
         ObservableList<String> divisionNames = FXCollections.observableArrayList();
         String query = "SELECT Division FROM first_level_divisions WHERE Country_ID = '2'";
@@ -53,7 +65,11 @@ public class FirstLevelDivisions {
         }
         return divisionNames;
     }
-
+    /**
+     * SQL query used to get all the divisions associated with Canada.
+     * @return observable list of all divisions associated with the Canada.
+     * @throws SQLException
+     */
     public static ObservableList<String> getCanadaDivision() throws SQLException {
         ObservableList<String> divisionNames = FXCollections.observableArrayList();
         String query = "SELECT Division FROM first_level_divisions WHERE Country_ID = '3'";
@@ -67,6 +83,12 @@ public class FirstLevelDivisions {
         return divisionNames;
     }
 
+    /**
+     * SQL query used to return the division ID of the selected division.
+     * @param divisionName
+     * @return selected division ID.
+     * @throws SQLException
+     */
     public static int getDivisionId(String divisionName) throws SQLException {
         int divisionId = 0;
         String query = "SELECT Division_ID FROM first_level_divisions WHERE Division = '" + divisionName + "'";

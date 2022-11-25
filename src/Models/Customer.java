@@ -1,13 +1,41 @@
 package Models;
 
-public class Customer {
+import DAO.Appointments;
+import DAO.Customers;
+import javafx.collections.ObservableList;
 
+import java.sql.SQLException;
+/**
+ * Class model for Customer class.
+ */
+public class Customer {
+    /**
+     * Holds the int value of the Customer's customer ID.
+     */
     private int customerId;
+    /**
+     * Holds the String value of the Customer's name.
+     */
     private String customerName;
+    /**
+     * Holds the String value of the Customer's address.
+     */
     private String address;
+    /**
+     * Holds the String value of the Customer's postal code.
+     */
     private String postalCode;
+    /**
+     * Holds the String value of the Customer's phone number.
+     */
     private String phoneNumber;
+    /**
+     * Holds the int value of the Customer's division Id.
+     */
     private int divisionId;
+    /**
+     * Holds the String value of the Customer's divison name.
+     */
     private String divisionName;
 
     /**
@@ -122,12 +150,22 @@ public class Customer {
         this.divisionName = divisionName;
     }
 
-    public static int customerIdCounter = 10;
-
-    public static int newCustomerId() {
-        customerIdCounter++;
-        return customerIdCounter;
+    /**
+     * Method for generating an new unique customer Id.
+     * @return new unique customer Id.
+     * @throws SQLException
+     */
+    public static int newCustomerId() throws SQLException {
+    ObservableList<Customer> allCustomers = Customers.getAllCustomers();
+    int max = 0;
+        for (Customer customer : allCustomers) {
+        int customerId = customer.getCustomerId();
+        if (customerId > max) {
+            max = customerId;
+        }
     }
+        return ++max;
+}
 
     /**
      * Constructor for customer class.

@@ -22,6 +22,9 @@ import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * Controller for the signIn view.
+ */
 public class SignInController implements Initializable {
     /**
      * Text Field to hold login username.
@@ -98,6 +101,12 @@ public class SignInController implements Initializable {
         printWriter.close();
     }
 
+    /**
+     * Initialize method called on during screen load.
+     * Sets text to either english or french based on user's computer settings.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

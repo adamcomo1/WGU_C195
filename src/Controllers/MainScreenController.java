@@ -2,7 +2,6 @@ package Controllers;
 
 import DAO.Appointments;
 import DAO.Customers;
-import DAO.Users;
 import Models.Appointment;
 import Models.Customer;
 import javafx.collections.FXCollections;
@@ -50,15 +49,27 @@ public class MainScreenController implements Initializable {
     public TableColumn<Customer, Integer> customerDivisionIdColumn;
     public TableView<Appointment> allApptTable;
     /**
-     * value to store if an alert has been given already.
+     * Boolean value to store if an alert has been given already.
      */
     public static boolean alerted = false;
+    /**
+     * Boolean to store if there is an upcoming appointment or not.
+     */
+    public static boolean upomingAppointment = false;
+    public Label upcomingApptLabel;
 
-
+    /**
+     * Method used to get the customer to modify.
+     * @return
+     */
     public static Customer getCustomerToModify() {
         return customerToModify;
     }
 
+    /**
+     * Method used to get the appointment to modify.
+     * @return
+     */
     public static Appointment getAppointmentToModify() {
         return appointmentToModify;
     }
@@ -67,7 +78,11 @@ public class MainScreenController implements Initializable {
 
     private static Appointment appointmentToModify;
 
-
+    /**
+     * Method to get to the add customer view.
+     * @param actionEvent add customer button pressed.
+     * @throws IOException
+     */
     public void addCustomerButton(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/AddCustomerView.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -76,6 +91,12 @@ public class MainScreenController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Method used to delete selected customer object.
+     * Provided a confirmation pop-up and cannot delete customer if they have appointments.
+     * @param actionEvent delete button pressed.
+     * @throws SQLException
+     */
     public void customerDeleteButton(ActionEvent actionEvent) throws SQLException {
         Customer customerSelected = allCustomerTable.getSelectionModel().getSelectedItem();
         int customer = allCustomerTable.getSelectionModel().getSelectedItem().getCustomerId();
@@ -108,6 +129,11 @@ public class MainScreenController implements Initializable {
         }
     }
 
+    /**
+     * Method used to get to update customer view.
+     * @param actionEvent update customer button pressed.
+     * @throws IOException
+     */
     public void customerUpdateButton(ActionEvent actionEvent) throws IOException {
         customerToModify = allCustomerTable.getSelectionModel().getSelectedItem();
          if (customerToModify == null) {
@@ -125,6 +151,11 @@ public class MainScreenController implements Initializable {
          }
     }
 
+    /**
+     * Method used to add an appointment to a customer.
+     * @param actionEvent add appointment button pressed.
+     * @throws IOException
+     */
     public void addAptButton(ActionEvent actionEvent) throws IOException {
         customerToModify = allCustomerTable.getSelectionModel().getSelectedItem();
         if (customerToModify == null) {
@@ -140,6 +171,11 @@ public class MainScreenController implements Initializable {
             stage.show();
         }
     }
+
+    /**
+     * Method to filter appointment table based on current month.
+     * @param actionEvent month radio selected.
+     */
     public void monthSelected(ActionEvent actionEvent) {
         try {
         ObservableList<Appointment> appointmentObservableList = Appointments.getAllAppointments();
@@ -156,7 +192,10 @@ public class MainScreenController implements Initializable {
             System.out.println("Bad appointment data");
         }
     }
-
+    /**
+     * Method to filter appointment table based on current week.
+     * @param actionEvent week radio selected.
+     */
     public void weekSelected(ActionEvent actionEvent) {
         try {
             ObservableList<Appointment> appointmentObservableList = Appointments.getAllAppointments();
@@ -175,8 +214,14 @@ public class MainScreenController implements Initializable {
 
     }
 
+    /**
+     * Method used to delete the selected appointment record.
+     * @param actionEvent delete appointment button pressed.
+     * @throws SQLException
+     */
     public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
         Appointment appointmentSelected = allApptTable.getSelectionModel().getSelectedItem();
+
         if (appointmentSelected == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -185,10 +230,10 @@ public class MainScreenController implements Initializable {
         }
         else {
             int ApptId = allApptTable.getSelectionModel().getSelectedItem().getAppointmentId();
-
+            String apptType = appointmentSelected.getApptType();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Confirmation");
-            alert.setContentText("Are you sure you wish to delete the selected appointment?");
+            alert.setContentText("Are you sure you wish to delete appointment " + ApptId + " of type " + apptType + "?");
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -201,6 +246,11 @@ public class MainScreenController implements Initializable {
 
     }
 
+    /**
+     * Method used to get to the update appointment view.
+     * @param actionEvent update appointment button pressed.
+     * @throws IOException
+     */
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
         appointmentToModify = allApptTable.getSelectionModel().getSelectedItem();
         if (appointmentToModify == null) {
@@ -218,6 +268,11 @@ public class MainScreenController implements Initializable {
         }
     }
 
+    /**
+     * Initialize method called on during screen load.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -228,6 +283,9 @@ public class MainScreenController implements Initializable {
                 LocalDateTime start = appointment.getApptStart();
                 LocalDateTime now = LocalDateTime.now();
                 if (start.isBefore(upComingAppt) && start.isAfter(now) || start.isEqual(now)) {
+                    upomingAppointment = true;
+                    upcomingApptLabel.setText("Upcoming appointment: ID " + appointment.getAppointmentId() + " Start: "
+                            + appointment.getApptStart());
                     if (!alerted) {
                         alerted = true;
 
@@ -236,6 +294,9 @@ public class MainScreenController implements Initializable {
                         alert.setContentText("There is an upcoming appointment within the next 15 minutes.");
                         alert.showAndWait();
                     }
+                }
+                if (!upomingAppointment) {
+                    upcomingApptLabel.setText("No upcoming appointments");
                 }
             }
         } catch (SQLException e) {
@@ -269,6 +330,11 @@ public class MainScreenController implements Initializable {
         aptUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
     }
 
+    /**
+     * Method used to get to the reports view.
+     * @param actionEvent
+     * @throws IOException
+     */
     public void reportsButtonPressed(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/ReportsView.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -277,6 +343,10 @@ public class MainScreenController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Method used to display all appointments in appointments table.
+     * @param actionEvent view all radio selected.
+     */
     public void viewAllSelected(ActionEvent actionEvent) {
         try {
             allApptTable.setItems(Appointments.getAllAppointments());

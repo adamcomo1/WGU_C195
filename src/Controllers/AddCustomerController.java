@@ -24,15 +24,41 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the AddCustomer view.
+ */
 public class AddCustomerController implements Initializable {
-
+    /**
+     * Text field to hold the customer name.
+     */
     public TextField customerNameField;
+    /**
+     * Text field to hold the address.
+     */
     public TextField addressField;
+    /**
+     * Text field to hold the phone number.
+     */
     public TextField phoneField;
+    /**
+     * Text field to hold the postal code.
+     */
     public TextField postalField;
+    /**
+     * Combo box of string used to hold the first level division names.
+     */
     public ComboBox<String> stateDropDown;
+    /**
+     * Combo box of string used to hold the country names.
+     */
     public ComboBox<String> countryDropDown;
 
+    /**
+     * Initialize method called on page load.
+     * Lambda expression used to efficiently populate country ComboBox.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -48,7 +74,10 @@ public class AddCustomerController implements Initializable {
 
     }
 
-
+    /**
+     * Method for populating the state ComboBox once the country is selected.
+     * @param actionEvent Country selected.
+     */
     public void CountrySelected(ActionEvent actionEvent) {
         String countrySelected = countryDropDown.getSelectionModel().getSelectedItem();
         //System.out.println(countrySelected);
@@ -83,7 +112,13 @@ public class AddCustomerController implements Initializable {
         }
 
     }
-
+    /**
+     * Method for saving input customer details as new customer.
+     * Provides input validation.
+     * @param actionEvent Save button pressed.
+     * @throws SQLException
+     * @throws IOException
+     */
     public void saveNewCustomer(ActionEvent actionEvent) throws IOException {
         try {
             int customerId = Customer.newCustomerId();
@@ -104,7 +139,11 @@ public class AddCustomerController implements Initializable {
         stage.setScene(scene);
         stage.show();
         }
-
+    /**
+     * Method for canceling page and returning to main screen.
+     * @param actionEvent
+     * @throws IOException
+     */
     public void cancelButton(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Views/MainScreenView.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

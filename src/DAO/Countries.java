@@ -9,11 +9,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Class used for handling SQL queries on the Countries table.
+ */
 public class Countries {
 
     public Countries(int countryId, String countryName) {
     }
 
+    /**
+     * SQL query used to get all the countries from the country table.
+     * @return observable list of country class.
+     * @throws SQLException
+     */
     public static ObservableList<Country> getAllCountries() throws SQLException {
         ObservableList<Country> countriesObservableList = FXCollections.observableArrayList();
         String query = "SELECT Country_ID, Country from countries";
@@ -29,6 +37,11 @@ public class Countries {
         return countriesObservableList;
     }
 
+    /**
+     * SQL query used to get all the country names from the country table.
+     * @return observable list of all country names.
+     * @throws SQLException
+     */
     public static ObservableList<String> getAllCountryNames() throws SQLException {
         ObservableList<String> countryNames = FXCollections.observableArrayList();
         String query = "SELECT Country FROM countries";

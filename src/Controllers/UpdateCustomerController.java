@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -32,6 +33,7 @@ public class UpdateCustomerController implements Initializable {
     public TextField postalField;
     public ComboBox<String> stateDropDown;
     public ComboBox<String> countryDropDown;
+    public Label customerIdLabel;
 
     private Customer customerSelected;
     private ObservableList<String> customerState;
@@ -40,6 +42,7 @@ public class UpdateCustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             customerSelected = MainScreenController.getCustomerToModify();
+            customerIdLabel.setText("Customer ID: " + customerSelected.getCustomerId());
             customerNameField.setText(customerSelected.getCustomerName());
             addressField.setText(customerSelected.getAddress());
             phoneField.setText(customerSelected.getPhoneNumber());
